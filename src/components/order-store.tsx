@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useMemo, useState } from "react";
 
-export type OrderStatus = "preparing" | "ready";
+export type OrderStatus = "queued" | "preparing" | "ready";
 
 export type Order = {
   id: string;
@@ -18,7 +18,9 @@ export type Order = {
 type OrderStore = {
   orders: Order[];
   addOrder: (order: Order) => void;
+  updateOrderStatus: (id: string, status: OrderStatus) => void;
   markReady: (id: string) => void;
+  startPreparing: (id: string) => void;
   removeOrder: (id: string) => void;
 };
 
@@ -36,12 +38,18 @@ export function OrderStoreProvider({ children }: { children: React.ReactNode }) 
     });
   };
 
-  const markReady = (id: string) => {
+  const updateOrderStatus = (id: string, status: OrderStatus) => {
     setOrders((prev) =>
-      prev.map((order) =>
-        order.id === id ? { ...order, status: "ready" } : order
-      )
+      prev.map((order) => (order.id === id ? { ...order, status } : order))
     );
+  };
+
+  const markReady = (id: string) => {
+    updateOrderStatus(id, "ready");
+  };
+
+  const startPreparing = (id: string) => {
+    updateOrderStatus(id, "preparing");
   };
 
   const removeOrder = (id: string) => {
@@ -49,7 +57,14 @@ export function OrderStoreProvider({ children }: { children: React.ReactNode }) 
   };
 
   const value = useMemo(
-    () => ({ orders, addOrder, markReady, removeOrder }),
+    () => ({
+      orders,
+      addOrder,
+      updateOrderStatus,
+      markReady,
+      startPreparing,
+      removeOrder,
+    }),
     [orders]
   );
 

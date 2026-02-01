@@ -1,15 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { OrderBoardColumns } from "../../components/order-board-columns";
 import type { Order } from "../../components/order-store";
 import { useOrderStore } from "../../components/order-store";
 import { getSocket } from "../../lib/socket-client";
 
 export default function AdminBoard() {
-  const { orders, addOrder, markReady, removeOrder } = useOrderStore();
-  const preparing = orders.filter((order) => order.status === "preparing");
+  const {
+    orders,
+    addOrder,
+    startPreparing,
+    markReady,
+    removeOrder,
+  } = useOrderStore();
+  const [mounted, setMounted] = useState(false);
+  const preparing = orders.filter((order) => order.status !== "ready");
   const ready = orders.filter((order) => order.status === "ready");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const socket = getSocket();
@@ -24,6 +35,21 @@ export default function AdminBoard() {
       socket.off("new-order", handleNewOrder);
     };
   }, [addOrder]);
+
+  const handleStartPreparing = (id: string) => {
+    startPreparing(id);
+    getSocket().emit("order-status", { id, status: "preparing" });
+  };
+
+  const handleMarkReady = (id: string) => {
+    markReady(id);
+    getSocket().emit("order-status", { id, status: "ready" });
+  };
+
+  const handleRemove = (id: string) => {
+    removeOrder(id);
+    getSocket().emit("order-remove", { id });
+  };
 
   return (
     <div
@@ -49,12 +75,19 @@ export default function AdminBoard() {
 
         <main className="mx-auto max-w-6xl px-6 pb-16">
           <div className="rounded-[36px] border border-white/20 bg-white/5 p-6 shadow-soft">
-            <OrderBoardColumns
-              preparing={preparing}
-              ready={ready}
-              onMarkReady={markReady}
-              onRemove={removeOrder}
-            />
+            {mounted ? (
+              <OrderBoardColumns
+                preparing={preparing}
+                ready={ready}
+                onStartPreparing={handleStartPreparing}
+                onMarkReady={handleMarkReady}
+                onRemove={handleRemove}
+              />
+            ) : (
+              <div className="rounded-3xl border border-dashed border-white/30 bg-white/10 p-8 text-center text-sm text-white/70">
+                Loading orders…
+              </div>
+            )}
           </div>
         </main>
       </div>

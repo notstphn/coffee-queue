@@ -6,6 +6,7 @@ import { OrderCard } from "./order-card";
 type OrderBoardColumnsProps = {
   preparing: Order[];
   ready: Order[];
+  onStartPreparing: (id: string) => void;
   onMarkReady: (id: string) => void;
   onRemove: (id: string) => void;
 };
@@ -13,6 +14,7 @@ type OrderBoardColumnsProps = {
 export function OrderBoardColumns({
   preparing,
   ready,
+  onStartPreparing,
   onMarkReady,
   onRemove,
 }: OrderBoardColumnsProps) {
@@ -42,6 +44,7 @@ export function OrderBoardColumns({
               <OrderCard
                 key={order.id}
                 order={order}
+                onStartPreparing={onStartPreparing}
                 onMarkReady={onMarkReady}
                 onRemove={onRemove}
                 variant="preparing"

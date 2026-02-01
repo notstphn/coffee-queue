@@ -18,6 +18,14 @@ io.on("connection", (socket) => {
     io.emit("new-order", order);
   });
 
+  socket.on("order-status", (payload) => {
+    io.emit("order-status", payload);
+  });
+
+  socket.on("order-remove", (payload) => {
+    io.emit("order-remove", payload);
+  });
+
   socket.on("disconnect", () => {
     console.log(`socket disconnected: ${socket.id}`);
   });

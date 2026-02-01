@@ -1,16 +1,28 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ItemModal } from "../components/item-modal";
 import { menuItems, type MenuItem } from "../components/menu-data";
 import { MenuItemCard } from "../components/menu-item-card";
 import { useOrderStore } from "../components/order-store";
 import { getSocket } from "../lib/socket-client";
 
+const createOrderId = () => {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return `order-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+};
+
 export default function Home() {
   const { addOrder, orders } = useOrderStore();
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
+
+  useEffect(() => {
+    // Establish the socket connection on page load (mobile Safari can be picky).
+    getSocket();
+  }, []);
 
   const orderCount = useMemo(() => orders.length, [orders.length]);
 
@@ -79,13 +91,13 @@ export default function Home() {
         onClose={() => setSelectedItem(null)}
         onAdd={({ customerName, itemName, milkType, notes, sugarLevel }) => {
           const order = {
-            id: crypto.randomUUID(),
+            id: createOrderId(),
             customerName,
             itemName,
             sugarLevel,
             milkType,
             notes,
-            status: "preparing",
+            status: "queued",
             createdAt: new Date().toISOString(),
           };
 

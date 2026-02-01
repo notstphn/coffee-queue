@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { Order } from "./order-store";
 
 type OrderCardProps = {
   order: Order;
+  onStartPreparing?: (id: string) => void;
   onMarkReady?: (id: string) => void;
   onRemove?: (id: string) => void;
   variant?: "preparing" | "ready";
@@ -11,10 +13,17 @@ type OrderCardProps = {
 
 export function OrderCard({
   order,
+  onStartPreparing,
   onMarkReady,
   onRemove,
   variant = "preparing",
 }: OrderCardProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div className="rounded-3xl border border-white/40 bg-white/80 p-5 shadow-soft backdrop-blur">
       <div className="flex items-start justify-between gap-4">
@@ -26,12 +35,19 @@ export function OrderCard({
             {order.customerName}
           </h3>
           <p className="text-sm text-[#5b4a3c]">{order.itemName}</p>
+          {order.status === "queued" && (
+            <span className="mt-2 inline-flex rounded-full bg-amber-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7c4f26]">
+              New
+            </span>
+          )}
         </div>
         <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-[#7c4f26]">
-          {new Date(order.createdAt).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+          {mounted
+            ? new Date(order.createdAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "--:--"}
         </span>
       </div>
 
@@ -58,9 +74,20 @@ export function OrderCard({
         ) : null}
       </dl>
 
-      {(onMarkReady || onRemove) && (
+      {(onStartPreparing || onMarkReady || onRemove) && (
         <div className="mt-5 flex flex-wrap gap-2">
-          {onMarkReady && variant === "preparing" && (
+          {onStartPreparing && order.status === "queued" && (
+            <button
+              type="button"
+              onClick={() => onStartPreparing(order.id)}
+              className="rounded-full bg-[#2a1e15] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#3a2c21]"
+            >
+              Start Preparing
+            </button>
+          )}
+          {onMarkReady &&
+            variant === "preparing" &&
+            order.status === "preparing" && (
             <button
               type="button"
               onClick={() => onMarkReady(order.id)}
