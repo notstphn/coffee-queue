@@ -7,6 +7,7 @@ type ItemModalProps = {
   item: MenuItem | null;
   onClose: () => void;
   onAdd: (payload: {
+    customerName: string;
     itemName: string;
     sugarLevel: number;
     milkType: string;
@@ -25,12 +26,14 @@ const sugarOptions = [
 const milkOptions = ["Whole", "Oat", "Almond", "Soy", "Skim"];
 
 export function ItemModal({ item, onClose, onAdd }: ItemModalProps) {
+  const [customerName, setCustomerName] = useState("");
   const [sugarLevel, setSugarLevel] = useState(50);
   const [milkType, setMilkType] = useState(milkOptions[0]);
   const [notes, setNotes] = useState("");
 
   useEffect(() => {
     if (item) {
+      setCustomerName("");
       setSugarLevel(50);
       setMilkType(milkOptions[0]);
       setNotes("");
@@ -70,6 +73,18 @@ export function ItemModal({ item, onClose, onAdd }: ItemModalProps) {
         </div>
 
         <div className="space-y-6 px-6 py-6">
+          <div>
+            <label className="text-sm font-semibold text-[#2a1e15]">
+              Your Name
+            </label>
+            <input
+              value={customerName}
+              onChange={(event) => setCustomerName(event.target.value)}
+              placeholder="Enter your name for the order."
+              className="mt-2 w-full rounded-2xl border border-[#e2d3c6] bg-[#fffaf5] p-3 text-sm text-[#2a1e15] focus:border-[#2a1e15] focus:outline-none"
+            />
+          </div>
+
           <div>
             <div className="flex items-center justify-between text-sm font-semibold text-[#2a1e15]">
               <span>Sugar Level</span>
@@ -130,21 +145,28 @@ export function ItemModal({ item, onClose, onAdd }: ItemModalProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t border-amber-100 px-6 py-5">
-          <div className="text-sm text-[#5b4a3c]">{item.price}</div>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-amber-100 px-6 py-5">
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
+              const trimmedName = customerName.trim();
+              if (!trimmedName) {
+                return;
+              }
+
               onAdd({
+                customerName: trimmedName,
                 itemName: item.name,
                 sugarLevel,
                 milkType,
                 notes,
-              })
-            }
+              });
+              onClose();
+            }}
+            disabled={!customerName.trim()}
             className="rounded-full bg-[#2a1e15] px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-[#3a2c21]"
           >
-            Add to Order
+            Submit Order
           </button>
         </div>
       </div>

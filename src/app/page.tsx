@@ -10,6 +10,7 @@ import { getSocket } from "../lib/socket-client";
 export default function Home() {
   const { addOrder, orders } = useOrderStore();
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const orderCount = useMemo(() => orders.length, [orders.length]);
 
@@ -30,6 +31,28 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {showConfirmation && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 px-6 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-4 rounded-3xl border border-emerald-200/80 bg-emerald-50 px-6 py-4 text-base font-semibold text-emerald-700 shadow-card">
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white">
+              <svg
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="h-5 w-5"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.704 5.29a1 1 0 0 1 .006 1.415l-7.07 7.092a1 1 0 0 1-1.42.005L3.296 8.87a1 1 0 1 1 1.408-1.42l3.2 3.18 6.364-6.34a1 1 0 0 1 1.436 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </span>
+            Order sent
+          </div>
+        </div>
+      )}
       <main className="mx-auto max-w-6xl space-y-10 px-5 pb-16 pt-8">
         <section>
           <div className="flex items-center justify-between">
@@ -54,14 +77,7 @@ export default function Home() {
       <ItemModal
         item={selectedItem}
         onClose={() => setSelectedItem(null)}
-        onAdd={({ itemName, milkType, notes, sugarLevel }) => {
-          const customerName =
-            window.prompt("What name should we put on the order?")?.trim() ??
-            "";
-          if (!customerName) {
-            return;
-          }
-
+        onAdd={({ customerName, itemName, milkType, notes, sugarLevel }) => {
           const order = {
             id: crypto.randomUUID(),
             customerName,
@@ -77,6 +93,8 @@ export default function Home() {
           // Send the new order to the real-time server.
           getSocket().emit("new-order", order);
           setSelectedItem(null);
+          setShowConfirmation(true);
+          window.setTimeout(() => setShowConfirmation(false), 2000);
         }}
       />
     </div>
