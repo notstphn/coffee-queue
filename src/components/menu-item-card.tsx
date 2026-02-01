@@ -15,13 +15,18 @@ export function MenuItemCard({ item, onSelect }: MenuItemCardProps) {
       className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/40 bg-white/80 p-5 text-left shadow-soft transition hover:-translate-y-1 hover:shadow-card"
     >
       <div
-        className={`mb-4 h-28 w-full rounded-2xl bg-gradient-to-br ${item.accent} p-4`}
+        className={`relative mb-4 h-28 w-full overflow-hidden rounded-2xl bg-gradient-to-br ${item.accent} p-4`}
       >
-        <div className="flex h-full items-end justify-between text-sm font-semibold text-[#2a1e15]">
+        <img
+          src={item.image}
+          alt={item.name}
+          className="absolute inset-0 h-full w-full object-cover opacity-85"
+        />
+        <div className="absolute inset-0 bg-black/10" />
+        <div className="relative flex h-full items-end justify-between text-sm font-semibold text-[#2a1e15]">
           <span className="rounded-full bg-white/70 px-2 py-1">
             {item.category}
           </span>
-          <span className="text-base font-bold">{item.price}</span>
         </div>
       </div>
       <h3 className="font-display text-xl font-semibold tracking-tight text-[#2a1e15]">

@@ -42,15 +42,8 @@ export default function AdminBoard() {
               Coffee Queue
             </p>
             <h1 className="font-display text-3xl text-white">
-              Order Pickup Board
+              Coffee, Bites and Vibes Coffeehouse
             </h1>
-            <p className="mt-2 max-w-xl text-sm text-amber-50/80">
-              Keep this screen visible for guests. Tap an order to move it to
-              ready, then clear it once it&apos;s picked up.
-            </p>
-          </div>
-          <div className="rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-amber-100">
-            Now Serving
           </div>
         </header>
 

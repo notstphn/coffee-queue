@@ -55,10 +55,10 @@ export function OrderBoardColumns({
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-[#b07b4a]">
-              Now Serving
+              Ready for Pickup
             </p>
             <h2 className="font-display text-2xl text-[#2a1e15]">
-              Ready for Pickup
+              Now Serving
             </h2>
           </div>
           <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-[#7c4f26]">

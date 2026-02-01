@@ -2,66 +2,58 @@ export type MenuItem = {
   id: string;
   name: string;
   description: string;
-  price: string;
   category: string;
   accent: string;
+  image: string;
 };
 
 export const menuItems: MenuItem[] = [
   {
     id: "latte-vanilla",
     name: "Vanilla Latte",
-    description: "Velvety espresso with vanilla bean and silky milk.",
-    price: "$69.69",
+    description: "Description 1.",
     category: "Lattes",
     accent: "from-amber-200 to-orange-300",
+    image: "/menu/vanilla-latte.png",
   },
   {
-    id: "mocha-cocoa",
-    name: "Cocoa Mocha",
-    description: "Dark chocolate and espresso topped with microfoam.",
-    price: "$5.75",
+    id: "latte-cinnamon-bun",
+    name: "Cinnamon Bun Latte",
+    description: "Description 2.",
     category: "Lattes",
     accent: "from-rose-200 to-orange-200",
+    image: "/menu/cinnamon-bun-latte.png",
   },
   {
-    id: "flat-white",
-    name: "Flat White",
-    description: "Smooth ristretto with a creamy milk finish.",
-    price: "$5.00",
-    category: "Espresso",
+    id: "latte-butter-pecan",
+    name: "Butter Pecan Latte",
+    description: "Description 3.",
+    category: "Lattes",
     accent: "from-amber-100 to-amber-300",
+    image: "/menu/butter-pecan-latte.png",
   },
   {
-    id: "cold-brew",
-    name: "Cold Brew",
-    description: "Slow-steeped, bright, and naturally sweet.",
-    price: "$4.75",
-    category: "Cold",
+    id: "latte-maple-butter",
+    name: "Maple Butter Latte",
+    description: "Description 4.",
+    category: "Lattes",
     accent: "from-sky-200 to-cyan-300",
+    image: "/menu/maple-butter-latte.png",
   },
   {
-    id: "matcha-oat",
-    name: "Matcha Oat",
-    description: "Ceremonial-grade matcha with oat milk.",
-    price: "$5.25",
-    category: "Non-Coffee",
+    id: "matcha-strawberry",
+    name: "Matcha Strawberry",
+    description: "Description 5.",
+    category: "Matcha",
     accent: "from-emerald-200 to-lime-300",
+    image: "/menu/matcha-strawberry.png",
   },
   {
-    id: "chai-cloud",
-    name: "Chai Cloud",
-    description: "Spiced chai with frothy milk and honey.",
-    price: "$5.00",
-    category: "Tea",
+    id: "matcha-vanilla",
+    name: "Vanilla Matcha",
+    description: "Description 6.",
+    category: "Matcha",
     accent: "from-yellow-200 to-orange-200",
-  },
-    {
-    id: "skibidi-riz",
-    name: "Riz Jizz",
-    description: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA BIG CHUNGUS.",
-    price: "$9.11",
-    category: "Non-Coffee",
-    accent: "from-green-200 to-red-200",
+    image: "/menu/vanilla-matcha.png",
   },
 ];

@@ -38,9 +38,6 @@ export default function Home() {
                 Menu
               </p>
             </div>
-            <span className="hidden rounded-full border border-[#2a1e15]/20 px-3 py-2 text-xs font-semibold text-[#2a1e15] md:inline-flex">
-              Select from the menu below
-            </span>
           </div>
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {menuItems.map((item) => (
